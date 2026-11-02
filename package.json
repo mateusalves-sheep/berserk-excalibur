@@ -1,0 +1,22 @@
+{
+  "name": "template-ts-parcel-v2",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "start": "parcel serve ./index.html",
+    "build": "parcel build ./index.html --dist-dir ./dist --public-url ./",
+    "test": "npm run build && npx playwright test",
+    "test:integration-update": "npx playwright test --update-snapshots"
+  },
+  "author": "Erik Onarheim",
+  "license": "BSD-2-Clause",
+  "dependencies": {
+    "excalibur": "0.32.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.0",
+    "@types/node": "^22.10.0",
+    "typescript": "5.9.3",
+    "parcel": "2.16.4"
+  }
+}
