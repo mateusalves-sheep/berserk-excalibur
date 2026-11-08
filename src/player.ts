@@ -1,5 +1,6 @@
-import { Actor, Collider, CollisionContact, Engine, Side, vec } from "excalibur";
+import { Actor, Collider, CollisionContact, Engine, Keys, Side, vec } from "excalibur";
 import { Resources } from "./resources";
+import { Config } from "./config";
 
 // Actors are the main unit of composition you'll likely use, anything that you want to draw and move around the screen
 // is likely built with an actor
@@ -42,13 +43,7 @@ export class Player extends Actor {
     this.graphics.add(Resources.Sword.toSprite());
 
     // Actions are useful for scripting common behavior, for example patrolling enemies
-    this.actions.delay(2000);
-    this.actions.repeatForever(ctx => {
-      ctx.moveBy({offset: vec(100, 0), durationMs: 1000});
-      ctx.moveBy({offset: vec(0, 100), durationMs: 1000});
-      ctx.moveBy({offset: vec(-100, 0), durationMs: 1000});
-      ctx.moveBy({offset: vec(0, -100), durationMs: 1000});
-    });
+  
 
     // Sometimes you want to click on an actor!
     this.on('pointerdown', evt => {
@@ -61,7 +56,26 @@ export class Player extends Actor {
   }
 
   override onPreUpdate(engine: Engine, elapsedMs: number): void {
-    // Put any update logic here runs every frame before Actor builtins
+    let direction = vec(0, 0);
+    if(engine.input.keyboard.isHeld(Keys.A) || engine.input.keyboard.isHeld(Keys.Left)){
+      direction.x = direction.x - 1;
+    }
+
+    if(engine.input.keyboard.isHeld(Keys.D) || engine.input.keyboard.isHeld(Keys.Right)){
+      direction.x = direction.x + 1;
+    }
+
+    if(engine.input.keyboard.isHeld(Keys.W) || engine.input.keyboard.isHeld(Keys.Up)){
+      direction.y = direction.y - 1;
+    }
+
+    if(engine.input.keyboard.isHeld(Keys.S) || engine.input.keyboard.isHeld(Keys.Down)){
+      direction.y = direction.y + 1; 
+    }
+    if(direction.distance() != 0){
+      direction = direction.normalize();
+    }
+    this.vel = direction.scale(Config.PlayerSpeed);
   }
 
   override onPostUpdate(engine: Engine, elapsedMs: number): void {
@@ -83,4 +97,5 @@ export class Player extends Actor {
   override onCollisionEnd(self: Collider, other: Collider, side: Side, lastContact: CollisionContact): void {
     // Called when a pair of objects separates
   }
+  
 }
