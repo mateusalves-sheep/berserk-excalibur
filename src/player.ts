@@ -1,4 +1,4 @@
-import { Actor, Collider, CollisionContact, Engine, Keys, Side, vec } from "excalibur";
+import { Actor, Collider, CollisionContact, Engine, Keys, Side, vec, Color} from "excalibur";
 import { Resources } from "./resources";
 import { Config } from "./config";
 
@@ -23,9 +23,10 @@ export class Player extends Actor {
       // Chrome: https://chromewebstore.google.com/detail/excalibur-dev-tools/dinddaeielhddflijbbcmpefamfffekc
       // Firefox: https://addons.mozilla.org/en-US/firefox/addon/excalibur-dev-tools/
       name: 'Player',
-      pos: vec(150, 150),
-      width: 100,
-      height: 100,
+      pos: vec((Config.ScreenWidth)/2, (Config.ScreenHeight)/2),
+      width: Config.TileSize,
+      height: Config.TileSize,
+      color: Color.Blue
       // anchor: vec(0, 0), // Actors default center colliders and graphics with anchor (0.5, 0.5)
       // collisionType: CollisionType.Active, // Collision Type Active means this participates in collisions read more https://excaliburjs.com/docs/collisiontypes
     });
@@ -40,19 +41,12 @@ export class Player extends Actor {
     // 2. You need excalibur to be initialized & started 
     // 3. Deferring logic to run time instead of constructor time
     // 4. Lazy instantiation
-    this.graphics.add(Resources.Sword.toSprite());
 
     // Actions are useful for scripting common behavior, for example patrolling enemies
   
 
     // Sometimes you want to click on an actor!
-    this.on('pointerdown', evt => {
-      // Pointer events tunnel in z order from the screen down, you can cancel them!
-      // if (true) {
-      //   evt.cancel();
-      // }
-      console.log('You clicked the actor @', evt.worldPos.toString());
-    });
+    
   }
 
   override onPreUpdate(engine: Engine, elapsedMs: number): void {
@@ -72,7 +66,7 @@ export class Player extends Actor {
     if(engine.input.keyboard.isHeld(Keys.S) || engine.input.keyboard.isHeld(Keys.Down)){
       direction.y = direction.y + 1; 
     }
-    if(direction.distance() != 0){
+    if(direction.distance() !== 0){
       direction = direction.normalize();
     }
     this.vel = direction.scale(Config.PlayerSpeed);
