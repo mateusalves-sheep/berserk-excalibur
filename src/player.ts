@@ -14,9 +14,11 @@ import { Config } from "./config";
 // actor.actions
 // actor.pointer
 
-
 export class Player extends Actor {
+  
+  lastDirection = vec(1,0);  
   constructor() {
+    
     super({
       // Giving your actor a name is optional, but helps in debugging using the dev tools or debug mode
       // https://github.com/excaliburjs/excalibur-extension/
@@ -68,6 +70,8 @@ export class Player extends Actor {
     }
     if(direction.distance() !== 0){
       direction = direction.normalize();
+      this.lastDirection = direction;
+      console.log(this.lastDirection.x, this.lastDirection.y);
     }
     this.vel = direction.scale(Config.PlayerSpeed);
   }
