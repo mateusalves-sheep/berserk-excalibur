@@ -7,9 +7,10 @@ export const Config = {
     PlayerHealth : 5, //vida do player
     PlayerShootCooldown : 1000, //cooldown do disparo do player
     PlayerBulletSpeed : 500, //velocidade do projetil do player
-    PlayerBulletSize : 4,
     PlayerBulletDamage : 1, //dano causado pelo projetil do player
     PlayerInvincibleTime: 1000, //tempo de invecibilidade do player(pós dano)
+    PlayerBulletSize : 4,
+    EnemyBulletSize : 4,
     EnemySpeed : 80, //velocidade do inimigo
     EnemyHealth : 2, //vida do inimigo
     EnemyShootCooldown : 1000, //cooldown do disparo do inimigo
