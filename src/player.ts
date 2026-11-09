@@ -1,6 +1,7 @@
 import { Actor, Collider, CollisionContact, Engine, Keys, Side, vec, Color} from "excalibur";
 import { Resources } from "./resources";
 import { Config } from "./config";
+import { Bullet } from "./bullet";
 
 // Actors are the main unit of composition you'll likely use, anything that you want to draw and move around the screen
 // is likely built with an actor
@@ -17,6 +18,7 @@ import { Config } from "./config";
 export class Player extends Actor {
   
   lastDirection = vec(1,0);  
+  cooldown = 0;
   constructor() {
     
     super({
@@ -53,6 +55,7 @@ export class Player extends Actor {
 
   override onPreUpdate(engine: Engine, elapsedMs: number): void {
     let direction = vec(0, 0);
+    this.cooldown -= elapsedMs;
     if(engine.input.keyboard.isHeld(Keys.A) || engine.input.keyboard.isHeld(Keys.Left)){
       direction.x = direction.x - 1;
     }
@@ -71,9 +74,14 @@ export class Player extends Actor {
     if(direction.distance() !== 0){
       direction = direction.normalize();
       this.lastDirection = direction;
-      console.log(this.lastDirection.x, this.lastDirection.y);
     }
     this.vel = direction.scale(Config.PlayerSpeed);
+    if(engine.input.keyboard.isHeld(Keys.Space) && this.cooldown <= 0){
+      const bullet = new Bullet(this.lastDirection, this.pos);
+      this.scene?.add(bullet);
+      this.cooldown = Config.PlayerShootCooldown;
+
+    }
   }
 
   override onPostUpdate(engine: Engine, elapsedMs: number): void {

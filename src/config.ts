@@ -5,7 +5,7 @@ export const Config = {
     FrameSpeed : 200, // frames/ms
     PlayerSpeed : 200, //velocidade do player
     PlayerHealth : 5, //vida do player
-    PlayerShootCooldown : 300, //cooldown do disparo do player
+    PlayerShootCooldown : 1000, //cooldown do disparo do player
     PlayerBulletSpeed : 500, //velocidade do projetil do player
     PlayerBulletSize : 4,
     PlayerBulletDamage : 1, //dano causado pelo projetil do player
