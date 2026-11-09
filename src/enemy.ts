@@ -1,10 +1,15 @@
-import { vec, Actor, Color } from "excalibur"
-import { TileSize, EnemyHealth } from "./config"
+import { Actor, Color } from "excalibur";
+import { Config } from "./config";
 
 export class Enemy extends Actor {
+  health: number;
 
-   
-    constructor() {
-          super({})
-    }
+  constructor() {
+    super({
+      width: Config.TileSize,
+      height: Config.TileSize,
+      color: Color.Red
+    });
+    this.health = Config.EnemyHealth;
+  }
 }
