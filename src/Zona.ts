@@ -1,7 +1,7 @@
 import { Actor, CollisionType, vec, Engine, Scene } from 'excalibur';
 import { TILE } from '../config';
 import { sprites } from '../sprites';
-import { Mateus } from './Mateus';
+import { Player } from './Player';
 
 export type TipoZona = 'agua' | 'espinho' | 'erva' | 'porta';
 
@@ -34,19 +34,19 @@ export class Zona extends Actor {
     this.graphics.use(sprites.obter('zona', chaveVisual));
 
     this.on('collisionstart', (evt) => {
-      if (!(evt.other.owner instanceof Mateus)) return;
+      if (!(evt.other.owner instanceof Player)) return;
       this.dentro = true;
       this.aoEntrar(evt.other.owner, evt.other.owner.scene as Scene);
     });
 
     this.on('collisionend', (evt) => {
-      if (!(evt.other.owner instanceof Mateus)) return;
+      if (!(evt.other.owner instanceof Player)) return;
       this.dentro = false;
       this.aoSair(evt.other.owner);
     });
   }
 
-  private aoEntrar(jogador: Mateus, scene: Scene) {
+  private aoEntrar(jogador: Player, scene: Scene) {
     switch (this.cfg.tipo) {
       case 'agua':
         jogador.aplicarLentidao(0.5);
@@ -76,7 +76,7 @@ export class Zona extends Actor {
     this.timerDano += delta;
     if (this.timerDano >= 500) {
       this.timerDano = 0;
-      const jogador = this.scene?.actors.find(a => a instanceof Mateus) as Mateus | undefined;
+      const jogador = this.scene?.actors.find(a => a instanceof Player) as Player | undefined;
       jogador?.receberDano(5, this.scene?.engine);
     }
   }
