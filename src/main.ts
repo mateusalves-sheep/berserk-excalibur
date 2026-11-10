@@ -1,5 +1,5 @@
 import { Color, DisplayMode, Engine, FadeInOut } from "excalibur";
-import { loader } from "./resources";
+//import { loader } from "./resources";
 import { EnemyTestScene } from "./enemytestscene";
 import { Config } from "./config";
 // Goal is to keep main.ts small and just enough to configure the engine

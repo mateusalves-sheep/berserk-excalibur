@@ -21,4 +21,6 @@ export const Config = {
     TrapDamage : 1, //dano da parede elétrica
     TrapCooldown : 1000, //cooldown da parede elétrica
     RoomCount : 6, //quantidade de salas
+    HudMargin : 16,
+    HudFontSize : 24,
 }
