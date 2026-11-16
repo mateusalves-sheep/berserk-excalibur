@@ -5,6 +5,8 @@ import { Porta } from "./porta";
 import { Player } from "./player";
 import { Enemy } from "./enemy";
 import { Hud } from "./hud";
+import { GraphicsGroup, Actor, CollisionType } from "excalibur";
+import { Resources, criarSprite } from "./resources";
 
 export type Lado = "norte" | "sul" | "leste" | "oeste";
 
@@ -51,6 +53,7 @@ export abstract class SalaBase extends Scene<DadosAtivacao> {
 
   private construir(spawn?: Lado): void {
     const T = Config.TileSize;
+    this.construirChao();
     const centro = (c: number, l: number) => vec((c + 0.5) * T, (l + 0.5) * T);
 
     let spawnPadrao = centro(2, 2);
@@ -101,4 +104,27 @@ export abstract class SalaBase extends Scene<DadosAtivacao> {
     this.trocando = true;
     this.engine.goToScene(destino, { sceneActivationData: { spawn: entrandoPor } });
   }
+
+  private construirChao(): void {
+  const T = Config.TileSize;
+  const membros: { graphic: ReturnType<typeof criarSprite>; offset: Vector }[] = [];
+
+  for (let linha = 0; linha < this.mapa.length; linha++) {
+    for (let coluna = 0; coluna < this.mapa[linha].length; coluna++) {
+      membros.push({
+        graphic: criarSprite(Resources.Floor, T, T),
+        offset: vec(coluna * T, linha * T),
+      });
+    }
+  }
+
+  const chao = new Actor({
+    pos: vec(0, 0),
+    anchor: vec(0, 0),
+    collisionType: CollisionType.PreventCollision,
+    z: -1,
+  });
+  chao.graphics.use(new GraphicsGroup({ members: membros }));
+  this.add(chao);
+}
 }

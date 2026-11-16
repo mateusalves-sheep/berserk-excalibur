@@ -1,9 +1,9 @@
-import { Actor, Collider, CollisionContact, CollisionType, Engine, Keys, Side, vec, Vector, Rectangle, Color} from "excalibur";
-import { Resources } from "./resources";
+import { Actor, Collider, CollisionContact, CollisionType, Engine, Keys, Side, vec, Vector, Rectangle, Color, Resource} from "excalibur";
 import { Config } from "./config";
 import { Bullet } from "./bullet";
 import { CollisionGroups } from "./collisions";
 import { Estado } from "./estado"
+import { Resources, criarSprite } from "./resources";
 
 export class Player extends Actor {
   lastDirection = vec(1,0);  
@@ -17,18 +17,15 @@ export class Player extends Actor {
   private readonly playerWidth = Config.TileSize*0.7;
   private readonly playerHeight = Config.TileSize*0.9;
 
-   private readonly spriteNormal = new Rectangle({
-    width: this.playerWidth,
-    height: this.playerHeight,
-    color: Color.Blue,
-  });
+   private readonly spriteNormal = criarSprite(Resources.Player, this.playerWidth, this.playerHeight);
+
+  private readonly spriteDano = (() => {
+    const s = criarSprite(Resources.Player, this.playerWidth, this.playerHeight);
+    s.tint = Color.Red;
+    return s;
+  })();
 
   // <- do Jogador.ts: flash vermelho ao levar dano
-  private readonly spriteDano = new Rectangle({
-    width: this.playerWidth,
-    height: this.playerHeight,
-    color: Color.Red,
-  });
 
 
   constructor(pos: Vector) {
@@ -69,6 +66,7 @@ export class Player extends Actor {
     if(Estado.vida <= 0){
       const scene = this.scene;
       this.kill();
+      Resources.Morte.play(0.7);
       if (scene) {
         scene.engine.clock.schedule(() => scene.engine.goToScene("gameover"), 800);
       }
@@ -107,12 +105,18 @@ export class Player extends Actor {
       direction = direction.normalize();
       this.lastDirection = direction;
     }
+    const angulo = this.lastDirection.toAngle();
+    this.spriteNormal.rotation = angulo;
+    this.spriteDano.rotation = angulo;
+
     this.vel = direction.scale(Config.PlayerSpeed);
 
     if(tecla.isHeld(Keys.Space) && this.cooldown <= 0){
       const origem = this.pos.add(this.lastDirection.scale(Config.TileSize*0.6))
       this.scene?.add(new Bullet(origem, this.lastDirection, "jogador"));
       this.cooldown = Config.PlayerShootCooldown;
+      Resources.Tiro.volume = 0.6;
+      Resources.Tiro.play();
     }
   }
 

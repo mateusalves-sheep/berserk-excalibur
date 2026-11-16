@@ -1,5 +1,5 @@
 import { Color, DisplayMode, Engine, FadeInOut } from "excalibur";
-import { loader } from "./resources";
+import { loader, Resources } from "./resources";
 import { Sala1, Sala2, Sala3, Sala4 } from "./Salas";
 import { GameOverScene } from "./gameover";
 import { Config } from "./config";
@@ -29,5 +29,7 @@ game
     }),
   })
   .then(() => {
-    // jogo iniciado
+    Resources.Musica.loop = true;
+    Resources.Musica.volume = 0.3;
+    Resources.Musica.play();
   });

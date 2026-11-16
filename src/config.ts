@@ -6,15 +6,15 @@ export const Config = {
     PlayerSpeed : 200, //velocidade do player
     PlayerHealth : 5, //vida do player
     PlayerShootCooldown : 1000, //cooldown do disparo do player
-    PlayerBulletSpeed : 500, //velocidade do projetil do player
+    PlayerBulletSpeed : 200, //velocidade do projetil do player
     PlayerBulletDamage : 1, //dano causado pelo projetil do player
     PlayerInvincibleTime: 1000, //tempo de invecibilidade do player(pós dano)
     PlayerBulletSize : 4,
     EnemyBulletSize : 4,
-    EnemySpeed : 80, //velocidade do inimigo
+    EnemySpeed : 50, //velocidade do inimigo
     EnemyHealth : 2, //vida do inimigo
-    EnemyShootCooldown : 1000, //cooldown do disparo do inimigo
-    EnemyBulletSpeed : 200, //velocidade do projetil do inimigo
+    EnemyShootCooldown : 3000, //cooldown do disparo do inimigo
+    EnemyBulletSpeed : 100, //velocidade do projetil do inimigo
     EnemyBulletDamage : 1, //dano causado pelo projetil do inimigo
     EnemyScore : 100, //pontuação que o inimigo dá quando morre
     MaxEnemiesPerRoom : 6, // Máximo de inimigos por sala

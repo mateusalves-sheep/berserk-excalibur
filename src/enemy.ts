@@ -4,10 +4,13 @@ import { CollisionGroups } from "./collisions";
 import { Player } from "./player";
 import { Bullet, Danificavel } from "./bullet";
 import { Estado } from "./estado";
+import { Resources, criarSprite } from "./resources";
 
 export class Enemy extends Actor implements Danificavel {
   private health = Config.EnemyHealth;
   private fireTimer: number = 0;
+  private flashTimer: number = 0;
+  private readonly sprite = criarSprite(Resources.Inimigo, Config.TileSize, Config.TileSize);
 
   constructor(pos: Vector, private readonly alvo: Player) {
     super({
@@ -22,16 +25,25 @@ export class Enemy extends Actor implements Danificavel {
     });
     
     this.addTag("inimigo");
+    this.graphics.use(this.sprite);
     this.fireTimer = Math.random() * Config.EnemyShootCooldown;
   }
 
   onPreUpdate(engine: Engine, delta: number): void {
+    if(this.flashTimer > 0){
+      this.flashTimer -= delta;
+      if(this.flashTimer <= 0){
+        this.sprite.tint = Color.White;
+      }
+    }
+
     if(this.alvo.isKilled()){
       this.vel = Vector.Zero;
       return;
     }
 
     const direction = this.alvo.pos.sub(this.pos);
+    this.sprite.rotation = direction.toAngle();
     if(direction.distance() > 5){
       this.vel = direction.normalize().scale(Config.EnemySpeed); 
     } else {
@@ -44,6 +56,7 @@ export class Enemy extends Actor implements Danificavel {
       const dir = direction.normalize();
       const origem = this.pos.add(dir.scale(Config.TileSize*0.7));
       this.scene?.add(new Bullet(origem, dir, "inimigo"));
+      Resources.Tiro.play(0.4);
     }
   }
 
@@ -56,7 +69,10 @@ export class Enemy extends Actor implements Danificavel {
 
   takeDamage(amount: number): void {
     this.health -= amount;
+    this.sprite.tint = Color.Red;
+    this.flashTimer = 120;
     if (this.health <= 0 && !this.isKilled()) {
+      Resources.Morte.play(0.5);
       Estado.pontos += Config.EnemyScore;
       this.kill();
     }
