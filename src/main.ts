@@ -1,31 +1,33 @@
 import { Color, DisplayMode, Engine, FadeInOut } from "excalibur";
-//import { loader } from "./resources";
-import { EnemyTestScene } from "./enemytestscene";
+import { loader } from "./resources";
+import { Sala1, Sala2, Sala3, Sala4 } from "./Salas";
+import { GameOverScene } from "./gameover";
 import { Config } from "./config";
-// Goal is to keep main.ts small and just enough to configure the engine
 
 const game = new Engine({
-  width: Config.ScreenWidth, // Logical width and height in game pixels
+  width: Config.ScreenWidth,
   height: Config.ScreenHeight,
-  displayMode: DisplayMode.FitScreenAndFill, // Display mode tells excalibur how to fill the window
-  pixelArt: true, // pixelArt will turn on the correct settings to render pixel art without jaggies or shimmering artifacts
+  displayMode: DisplayMode.FitScreenAndFill,
+  pixelArt: true,
+  backgroundColor: Color.fromHex("#101820"),
   scenes: {
-    start: EnemyTestScene
+    sala1: Sala1,
+    sala2: Sala2,
+    sala3: Sala3,
+    sala4: Sala4,
+    gameover: GameOverScene,
   },
-  // physics: {
-  //   solver: SolverStrategy.Realistic,
-  //   substep: 5 // Sub step the physics simulation for more robust simulations
-  // },
-  // fixedUpdateTimestep: 16 // Turn on fixed update timestep when consistent physic simulation is important
 });
 
-game.start('start', { // name of the start scene 'start'
-  loader, // Optional loader (but needed for loading images/sounds)
-  inTransition: new FadeInOut({ // Optional in transition
-    duration: 1000,
-    direction: 'in',
-    color: Color.ExcaliburBlue
+game
+  .start("sala1", {
+    loader,
+    inTransition: new FadeInOut({
+      duration: 1000,
+      direction: "in",
+      color: Color.ExcaliburBlue,
+    }),
   })
-}).then(() => {
-  // Do something after the game starts
-});
+  .then(() => {
+    // jogo iniciado
+  });

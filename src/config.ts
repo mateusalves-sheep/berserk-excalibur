@@ -19,8 +19,16 @@ export const Config = {
     EnemyScore : 100, //pontuação que o inimigo dá quando morre
     MaxEnemiesPerRoom : 6, // Máximo de inimigos por sala
     TrapDamage : 1, //dano da parede elétrica
-    TrapCooldown : 1000, //cooldown da parede elétrica
     RoomCount : 6, //quantidade de salas
     HudMargin : 16,
     HudFontSize : 24,
+    TILE_VAZIO: 'V',
+    TILE_PAREDE: 'P',
+    TILE_ELETRICA: 'E',
+    TILE_JOGADOR: 'J',
+    TILE_INIMIGO: 'I',
+    TILE_PORTA_NORTE: 'N',
+    TILE_PORTA_SUL: 'S',
+    TILE_PORTA_LESTE: 'L',
+    TILE_PORTA_OESTE: 'O'
 }

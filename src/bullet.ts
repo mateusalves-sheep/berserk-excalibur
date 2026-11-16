@@ -1,33 +1,48 @@
-import { Actor, Engine, Color, Vector, CollisionGroup } from "excalibur";
+import { Actor, Engine, Color, Vector, CollisionGroup, CollisionType } from "excalibur";
 import { Config } from "./config";
 import { CollisionGroups } from "./collisions";
 
+export interface Danificavel {
+  takeDamage(quantidade: number): void;
+}
+
+function isDanificavel(x: unknown): x is Danificavel {
+  return typeof (x as { takeDamage?: unknown } | undefined)?.takeDamage === "function";
+}
+
+export type DonoDoTiro = "jogador" | "inimigo";
+
 export class Bullet extends Actor {
   
-  constructor(
-    position: Vector, 
-    direction: Vector, 
-    collisionGroup: CollisionGroup = CollisionGroups.PlayerBullet, 
-    color: Color = Color.Cyan
-  ) {
+  private readonly dano: number;
+
+  constructor(position: Vector,  direction: Vector, dono: DonoDoTiro) {
     super({
       name: 'Bullet',
       pos: position,
-      width: Config.PlayerBulletSize,
-      height: Config.PlayerBulletSize,
-      color: color,
-      collisionGroup: collisionGroup
+      width: dono === "jogador" ? Config.PlayerBulletSize : Config.EnemyBulletSize,
+      height: dono === "jogador" ? Config.PlayerBulletSize : Config.EnemyBulletSize,
+      color: dono === "jogador" ? Color.Cyan : Color.Orange,
+      collisionType: CollisionType.Passive,
+      collisionGroup: dono === "jogador"? CollisionGroups.PlayerBullet : CollisionGroups.EnemyBullet,
+      z : 5
     });
     
-    this.vel = direction.scale(Config.PlayerBulletSpeed);
+    this.dano = dono === "jogador" ? Config.PlayerBulletDamage : Config.EnemyBulletDamage;
+    const velocidade = dono === "jogador" ? Config.PlayerBulletSpeed : Config.EnemyBulletSpeed;
+    this.vel = direction.normalize().scale(velocidade);
   }
 
   override onInitialize(engine: Engine): void {
-    // Destrói a bala ao atingir qualquer parede
     this.on("collisionstart", (evt) => {
-      if (evt.other.collisionGroup === CollisionGroups.Wall) {
-        this.kill();
+      if(this.isKilled()){
+        return;
       }
+      const other = evt.other.owner;
+      if (isDanificavel(other)) {
+        other.takeDamage(this.dano);
+      }
+      this.kill();
     });
   }
 
