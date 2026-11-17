@@ -1,6 +1,7 @@
-import { Actor, CollisionType, Color, Engine, Rectangle, vec } from "excalibur";
+import { Actor, CollisionType, Engine, vec } from "excalibur";
 import { Config } from "./config";
 import { CollisionGroups } from "./collisions";
+import { Resources, criarSprite } from "./resources";
 
 export class Parede extends Actor {
   readonly eletrica: boolean;
@@ -21,14 +22,12 @@ export class Parede extends Actor {
     this.addTag("parede");
     if (eletrica) this.addTag("eletrica");
 
-    this.graphics.use(
-      new Rectangle({ width: T, height: T, color: eletrica ? Color.Yellow : Color.Gray })
-    );
+    this.graphics.use(criarSprite(eletrica ? Resources.Eletrica : Resources.Parede, T, T));
   }
 
   override onPreUpdate(_engine: Engine, _delta: number): void {
     if (this.eletrica) {
-      // Efeito de "faísca"
+      // Efeito de faísca
       this.graphics.opacity = 0.6 + 0.4 * Math.abs(Math.sin(performance.now() / 120));
     }
   }
